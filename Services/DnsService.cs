@@ -170,10 +170,18 @@ namespace DiscordBypass.Services
                 "discordapp.com",
                 "cdn.discordapp.com",
                 
-                // Additional FiveM-specific (if any custom auth)
+                // FiveM Discovery and API
+                "cfx.re",
+                "cn.cfx.re",
+                "users.cfx.re",
+                "status.cfx.re",
                 "keymaster.fivem.net",
                 "runtime.fivem.net",
-                "cfx.re"
+                "metrics.fivem.net",
+                "servers-live.fivem.net",
+                "servers-frontend.fivem.net",
+                "lambda.fivem.net",
+                "connect.fivem.net"
             };
         }
 

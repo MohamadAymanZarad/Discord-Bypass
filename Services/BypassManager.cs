@@ -15,6 +15,7 @@ namespace DiscordBypass.Services
         public bool EnableValorant { get; set; } = true;
         public bool EnableLeague { get; set; } = true;
         public bool EnableDpiBypass { get; set; } = true;
+        public bool LowPingMode { get; set; } = false;
     }
 
     /// <summary>
@@ -59,14 +60,25 @@ namespace DiscordBypass.Services
                 
                 bool anySuccess = false;
                 
-                // STEP 1: Try Cloudflare WARP first (most reliable for Egypt)
+                // STEP 1: Reliability Mode (WARP) vs Low Ping Mode (GoodbyeDPI)
                 if (options.EnableDpiBypass)
                 {
                     Log("══════════════════════════════════════");
-                    Log("   STEP 1: CLOUDFLARE WARP");
+                    Log(options.LowPingMode ? "   STEP 1: LOW PING MODE (DPI BYPASS)" : "   STEP 1: CLOUDFLARE WARP");
                     Log("══════════════════════════════════════");
                     
-                    if (_warpService.IsWarpInstalled)
+                    if (options.LowPingMode)
+                    {
+                        Log("Low Ping Mode active - skipping WARP to maintain game ping.");
+                        Log("Starting GoodbyeDPI (Stealth Mode)...");
+                        _dpiService.AggressiveMode = true; // Use aggressive settings for low ping mode
+                        bool dpiStarted = await _dpiService.StartAsync();
+                        if (dpiStarted)
+                        {
+                            anySuccess = true;
+                        }
+                    }
+                    else if (_warpService.IsWarpInstalled)
                     {
                         Log("WARP is installed, connecting...");
                         bool warpConnected = await _warpService.ConnectAsync();
@@ -84,6 +96,15 @@ namespace DiscordBypass.Services
                         Log("2. Download 'WARP for Windows'");
                         Log("3. Install and restart this app");
                         Log("");
+
+                        if (options.EnableFiveM)
+                        {
+                            Log("⚠ [IMPORTANT] FiveM REQUIRES WARP to connect to certain servers in Egypt.");
+                            Log("For a full connection, WARP is more reliable.");
+                            Log("Switch to 'Low Ping Mode' if you only need Auth/Discord.");
+                            Log("");
+                        }
+
                         Log("Trying alternative method (GoodbyeDPI)...");
                         
                         // Try GoodbyeDPI as fallback
@@ -168,15 +189,27 @@ namespace DiscordBypass.Services
                 if (_warpService.IsWarpInstalled && await _warpService.IsConnectedAsync())
                 {
                     Log("✓ WARP: CONNECTED");
+                    if (options.EnableFiveM)
+                    {
+                        Log("✓ FiveM: Connection fix active via WARP");
+                    }
                 }
                 else if (_dpiService.IsRunning)
                 {
                     Log("✓ DPI Bypass: ACTIVE");
+                    if (options.EnableFiveM)
+                    {
+                        Log("⚠ FiveM: Connection may fail without WARP (UDP block)");
+                    }
                 }
                 else
                 {
                     Log("⚠ No VPN/DPI bypass active");
                     Log("  Discord may not work!");
+                    if (options.EnableFiveM)
+                    {
+                        Log("  FiveM will NOT work!");
+                    }
                     Log("  Please install Cloudflare WARP");
                 }
                 

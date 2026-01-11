@@ -19,6 +19,7 @@ namespace DiscordBypass.Services
         public event Action<string>? OnLogMessage;
         
         public bool IsRunning => _goodbyeDpiProcess != null && !_goodbyeDpiProcess.HasExited;
+        public bool AggressiveMode { get; set; } = false;
 
         public DpiBypassService()
         {
@@ -115,16 +116,17 @@ namespace DiscordBypass.Services
 
             try
             {
-                Log("Starting GoodbyeDPI with Egypt-optimized settings...");
-                
                 // Optimal settings for bypassing Egyptian DPI
-                // -5 = Russia preset (aggressive, works for most DPI)
-                // -e = Additional SNI bypass
-                // -q = Quiet mode
+                // Normal: -5 -e 1 -q (Standard preset)
+                // Aggressive: -6 -e 1 -p -q (Preset 6 + Passive DPI block)
+                string args = AggressiveMode ? "-6 -e 1 -p -q" : "-5 -e 1 -q";
+                
+                Log($"Starting GoodbyeDPI with {(AggressiveMode ? "Aggressive" : "Standard")} settings...");
+                
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = exePath,
-                    Arguments = "-5 -e 1 -q",
+                    Arguments = args,
                     WorkingDirectory = Path.Combine(_goodbyeDpiPath, "x86_64"),
                     UseShellExecute = false,
                     CreateNoWindow = true,

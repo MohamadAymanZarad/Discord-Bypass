@@ -105,7 +105,8 @@
                                       Margin="0,0,0,16"/>
                             
                             <CheckBox x:Name="FiveMToggle" 
-                                      Content="FiveM OAuth Support" 
+                                      Content="FiveM Connection Fix" 
+                                      ToolTip="Requires Cloudflare WARP for UDP bypass (Fixes 'Couldn't connect' error)"
                                       Style="{StaticResource ToggleSwitch}"
                                       IsChecked="True"
                                       Margin="0,0,0,16"/>
@@ -142,7 +143,14 @@
                             <CheckBox x:Name="MinimizeToTrayToggle" 
                                       Content="Minimize to system tray" 
                                       Style="{StaticResource ToggleSwitch}"
-                                      IsChecked="True"/>
+                                      IsChecked="True"
+                                      Margin="0,0,0,16"/>
+
+                            <CheckBox x:Name="LowPingModeToggle" 
+                                      Content="Low Ping Mode (Stealth)" 
+                                      ToolTip="Bypass VPN detection. Best for FiveM/Valorant. Ping stays 0."
+                                      Style="{StaticResource ToggleSwitch}"
+                                      IsChecked="False"/>
                         </StackPanel>
                     </Border>
                     

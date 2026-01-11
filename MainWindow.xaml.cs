@@ -108,7 +108,8 @@ namespace DiscordBypass
                     EnableDiscord = DiscordToggle.IsChecked == true,
                     EnableFiveM = FiveMToggle.IsChecked == true,
                     EnableValorant = ValorantToggle.IsChecked == true,
-                    EnableLeague = LeagueToggle.IsChecked == true
+                    EnableLeague = LeagueToggle.IsChecked == true,
+                    LowPingMode = LowPingModeToggle.IsChecked == true
                 };
                 
                 bool success = await _bypassManager.EnableBypassAsync(options);
@@ -202,6 +203,7 @@ namespace DiscordBypass
             ValorantToggle.IsChecked = true;
             LeagueToggle.IsChecked = true;
             MinimizeToTrayToggle.IsChecked = true;
+            LowPingModeToggle.IsChecked = false;
             
             AddLogMessage("Settings reset to defaults.");
         }
