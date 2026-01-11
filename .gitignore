@@ -1,0 +1,23 @@
+# Build results
+bin/
+obj/
+publish/
+
+# MSBuild artifacts
+*.log
+*.err
+*build_output.txt
+error.txt
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+# User-specific files
+/UserSpecific/
+
+# OS generated files
+.DS_Store
+Thumbs.db
